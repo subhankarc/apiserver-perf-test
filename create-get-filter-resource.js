@@ -11,7 +11,7 @@ const sampleDeployment = require('./sample-deployment.json');
 
 
 const kubeConfigExists = true;
-const MAX_COUNT = 100;
+const MAX_COUNT = 10;
 const BATCH_SIZE = 5;
 
 const configValue = kubeConfigExists ? kc.config.fromKubeconfig('./kubeconfig.yaml') : {

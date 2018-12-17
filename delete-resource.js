@@ -11,7 +11,7 @@ const sampleDeployment = require('./sample-deployment.json');
 
 
 const kubeConfigExists = true;
-const MAX_COUNT = 100;
+const MAX_COUNT = 10;
 const BATCH_SIZE = 5;
 
 
@@ -86,14 +86,14 @@ return promiseChain
     console.log(actualDataObjects);
     const actualCsvFromArrayOfObjects = convertArrayToCSV(actualDataObjects);
     const completeCsvFromArrayOfObjects = convertArrayToCSV(dataObjects);
-    fs.writeFile("datafile/deleteFilter.csv", actualCsvFromArrayOfObjects, function (err) {
+    fs.writeFile("datafile/dataDelete.csv", actualCsvFromArrayOfObjects, function (err) {
       if (err) {
         return console.log(err);
       }
       console.log("The file was saved!");
     });
 
-    fs.writeFile("datafile/completeDeleteFilter.csv", completeCsvFromArrayOfObjects, function (err) {
+    fs.writeFile("datafile/completeDataDelete.csv", completeCsvFromArrayOfObjects, function (err) {
       if (err) {
         return console.log(err);
       }
