@@ -1,0 +1,15 @@
+{
+    "apiVersion": "deployment.servicefabrik.io/v1alpha1",
+    "kind": "Director",
+    "metadata": {
+        "name": "dddd"
+    },
+    "spec": {
+        "options": "sample_options"
+    },
+    "status": {
+        "state": "succeeded",
+        "lastoperation": "bla bla",
+        "response": "bla bla"
+    }
+}

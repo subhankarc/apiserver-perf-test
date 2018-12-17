@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <body>
+    <a href="https://github.com/flexiodata/examples/tree/master/demo-chartjs-from-csv"><img class="z-max" style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <div style="text-align:center;">
+      <canvas id="canvas" style="width: 1000px; height: 600px"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script>
+      var api_key = 'jynqpsnznvhxcngrdjhd'
+      axios({
+        method: 'post',
+        url: 'https://api.flex.io/v1/me/pipes/examples-demo-create-chart-with-chartjs-from-a-csv/run',
+        headers: {
+          Authorization: 'Bearer ' + api_key
+        }
+      })
+      .then(response => {
+        var ctx = document.getElementById('canvas').getContext('2d')
+        window.my_chart = new Chart(ctx, {
+          type: 'bar',
+          data: response.data,
+          options: {
+            responsive: false,
+            legend: {
+              position: 'top'
+            },
+            title: {
+              display: true,
+              text: 'Power a Chart with Flex.io'
+            }
+          }
+        })
+      })
+      .catch(response => {
+      })
+    </script>
+  </body>
+</html>
