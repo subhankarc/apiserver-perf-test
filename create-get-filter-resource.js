@@ -10,14 +10,14 @@ const converter = require('convert-array-to-csv');
 const sampleDeployment = require('./sample-deployment.json');
 
 
-const kubeConfigExists = true;
+const kubeConfigExists = false;
 const MAX_COUNT = 10;
 const BATCH_SIZE = 5;
 
 const configValue = kubeConfigExists ? kc.config.fromKubeconfig('./kubeconfig.yaml') : {
-  url: 'https://10.244.14.249:9443',
-  cert: fs.readFileSync('kube-client-cert.pem'),
-  key: fs.readFileSync('kube-client-key.pem'),
+  url: 'https://10.252.11.10:9443',
+  cert: fs.readFileSync('/users/i068838/sf-dev-landscape-aws3/deployments/service-fabrik/credentials/service-fabrik-certs/apiserver-certs/client.crt'),
+  key: fs.readFileSync('/users/i068838/sf-dev-landscape-aws3/deployments/service-fabrik/credentials/service-fabrik-certs/apiserver-certs/client.key'),
   insecureSkipTlsVerify: true
 }
 const client = new kc.Client({
