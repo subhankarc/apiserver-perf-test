@@ -36,14 +36,11 @@ function init() {
       return client.loadSpec()
         .then(() => {
           ready = true;
-          console.log('Successfully loaded ApiServer Spec');
         })
         .catch(err => {
           console.log('Error occured while loading ApiServer Spec', err);
           throw err;
         });
-    } else {
-      console.log('Spec already loaded');
     }
   });
 }
