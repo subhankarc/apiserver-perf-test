@@ -31,8 +31,6 @@ client.addCustomResourceDefinition(crdJson);
 
 let dataObjects = [];
 
-let actualDataObjects = [];
-
 const createGetFilterAll = function (count) {
   return Promise.try(() => client.loadSpec()
     .then(() => {
@@ -74,7 +72,11 @@ const createGetFilterAll = function (count) {
       let obj = _.find(dataObjects, ['count', count])
       let timeForFilter = Date.now() - obj.startFilter;
       obj.filter = timeForFilter;
-      actualDataObjects.push(_.pick(obj, ['count', 'get', 'post', 'filter', 'delete']));
+      _.omit(obj, ['startPost', 'startGet', 'startFilter']);
+      _.remove(dataObjects, function (n) {
+        return n.count == count;
+      });
+      dataObjects.push(_.pick(obj, ['count', 'post', 'get', 'filter']));
       return obj;
     }));
 };
@@ -88,7 +90,6 @@ const chunk = (array, batchSize = BATCH_SIZE) => {
   return chunked;
 }
 
-// Replace with real data
 const chunkedData = chunk([...Array(MAX_COUNT + 1).keys()]);
 
 const reducer = (chain, batch) => chain
@@ -104,38 +105,18 @@ const promiseChain = chunkedData.reduce(
 return promiseChain
   .then(() => console.log('create done'))
   .then(() => {
-    _.remove(actualDataObjects, function (n) {
-      return n.count == 0;
-    });
     _.remove(dataObjects, function (n) {
       return n.count == 0;
     });
-    console.log(actualDataObjects);
-    const actualCsvFromArrayOfObjects = convertArrayToCSV(actualDataObjects);
-    const completeCsvFromArrayOfObjects = convertArrayToCSV(dataObjects);
+    console.log(dataObjects);
+    const actualCsvFromArrayOfObjects = convertArrayToCSV(dataObjects);
     fs.writeFile("datafile/dataCreateGetFilter.csv", actualCsvFromArrayOfObjects, function (err) {
       if (err) {
         return console.log(err);
       }
       console.log("The file was saved!");
     });
-
-    fs.writeFile("datafile/completeDataCreateGetFilter.csv", completeCsvFromArrayOfObjects, function (err) {
-      if (err) {
-        return console.log(err);
-      }
-      console.log("The file was saved!");
-    });
   })
-
-// function deleteAll() {
-//   var promises = [];
-//   for (count = 1; count < MAX_COUNT + 1; count++) {
-//     var promise = ((count) => {})(count);
-//     promises.push(promise);
-//   }
-//   return promises;
-// }
 
 function massageData(sampleDeployment, count) {
   let returnedDeployment = _.cloneDeep(sampleDeployment);
