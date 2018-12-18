@@ -90,14 +90,12 @@ npm start
 ```
 This should start the server on 3000 port.
 
-Open https://localhost:3000 to access it and follow the guide to create charts.
+Open http://localhost:3000 to access it and follow the guide to create charts.
 
-
-## Development
 
 ## Statistics
 
-### Gardener ApiServer
+### Gardener ApiServer Stats
 
 #### Data with 100 resources and 5 parallel operations
 
