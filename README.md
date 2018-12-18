@@ -25,6 +25,72 @@ With the goal at hand, our test cases are to see the time taken for the fllowing
 
 ## How to run
 
+There are two different files for the testcases.
+
+1. create-get-filter-resource.js
+
+You can change the value of m and n in the following variables.
+
+```javascript
+const MAX_COUNT = 10;
+const BATCH_SIZE = 5;
+```
+Also, you can change the output file here
+
+```javascript
+fs.writeFile("datafile/dataCreateGetFilter.csv", actualCsvFromArrayOfObjects, function (err) {
+  if (err) {
+    return console.log(err);
+  }
+  console.log("The file was saved!");
+});
+```
+Once done, you can run it using
+
+```shell
+node create-get-filter-resource.js
+```
+This should save the resoult in the output csv file.
+
+2. delete-resource.js
+
+Similar to the first file, you can change the value of m and n in the following variables.
+
+```javascript
+const MAX_COUNT = 10;
+const BATCH_SIZE = 5;
+```
+Also, you can change the output file here
+
+```javascript
+fs.writeFile("datafile/dataDelete.csv", actualCsvFromArrayOfObjects, function (err) {
+  if (err) {
+    return console.log(err);
+  }
+  console.log("The file was saved!");
+});
+```
+Once done, you can run it using
+
+```shell
+node delete-resource.js
+```
+
+## Graph creation
+
+We recomend to use https://github.com/charted-co/charted.git to create the chart out of the csv files.
+
+The following needs to be done for it.
+```shell
+git clone https://github.com/charted-co/charted.git
+cd charted
+npm install
+nvm use 8.14.0
+npm start
+```
+This should start the server on 3000 port.
+
+Open https://localhost:3000 to access it and follow the guide to create charts.
 
 
 ## Development
