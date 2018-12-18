@@ -95,6 +95,15 @@ Open http://localhost:3000 to access it and follow the guide to create charts.
 
 ## Statistics
 
+### Service Fabrik ApiServer Stats
+
+#### Data with 1000 resources and 5 parallel operations
+
+![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Post-bosh-1000.png?raw=true)
+![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Get-bosh-1000.png?raw=true)
+![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Filter-bosh-1000.png?raw=true)
+![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Delete-bosh-1000.png?raw=true)
+
 ### Gardener ApiServer Stats
 
 #### Data with 100 resources and 5 parallel operations
