@@ -34,12 +34,6 @@ build/Release
 
 # Dependency directories
 node_modules/
-charted/node_modules/
-charted/npm-debug.log
-charted/.DS_Store
-charted/out/
-charted/.charted_db
-charted/dump.rdb
 
 jspm_packages/
 
