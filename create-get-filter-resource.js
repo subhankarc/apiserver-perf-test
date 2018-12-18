@@ -28,11 +28,30 @@ const client = new kc.Client({
 const crdJson = yaml.safeLoad(fs.readFileSync('./deployment-crd.yaml', 'utf8'));
 client.addCustomResourceDefinition(crdJson);
 
+let ready = false;
+
+function init() {
+  return Promise.try(() => {
+    if (!ready) {
+      return client.loadSpec()
+        .then(() => {
+          ready = true;
+          console.log('Successfully loaded ApiServer Spec');
+        })
+        .catch(err => {
+          console.log('Error occured while loading ApiServer Spec', err);
+          throw err;
+        });
+    } else {
+      console.log('Spec already loaded');
+    }
+  });
+}
 
 let dataObjects = [];
 
 const createGetFilterAll = function (count) {
-  return Promise.try(() => client.loadSpec()
+  return Promise.try(() => init()
     .then(() => {
       let startPost = Date.now();
       dataObjects.push({
