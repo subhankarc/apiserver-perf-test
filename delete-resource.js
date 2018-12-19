@@ -15,7 +15,7 @@ const kubeConfigExists = false;
 
 const MAX_COUNT = 10;
 const BATCH_SIZE = 5;
-const fileName = "datafile/dataDelete.csv";
+const fileName = `datafile/dataDelete-${MAX_COUNT}-${BATCH_SIZE}.csv`;
 
 
 const configValue = kubeConfigExists ? kc.config.fromKubeconfig('./kubeconfig.yaml') : {

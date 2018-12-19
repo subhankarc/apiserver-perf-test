@@ -15,7 +15,7 @@ const kubeConfigExists = false;
 
 const MAX_COUNT = 10;
 const BATCH_SIZE = 5;
-const fileName = "datafile/dataCreateGetFilter.csv";
+const fileName = `datafile/dataCreatePatchGetFilter-bosh-${MAX_COUNT}-${BATCH_SIZE}.csv`;
 
 
 const patchDep = {
