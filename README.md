@@ -3,13 +3,15 @@
 ## Goal
 Primarily, these are the following goals for performing the ApiServer performance test.
 
-1. Number of resource instance ApiServer can support and performance impact on create, delete and get of a resource with n number of existing resources already present.
+1. Number of resource instance ApiServer can support and performance impact on create, patch, delete and get of a resource with n number of existing resources already present.
 
 2. If resources need to be filtered based on the specific key value, which are part of the label, how is the performance with n number of resources present in ApiServer.
 
+3. ETCD CPU and memory stats for high workload.
+
 ## Anti-Goal
 
-We intend to test only the ApiServer and not ETCD directly.
+We intend to test only the ApiServer and not ETCD directly, only monitor the VM metrics of it.
 
 ## Test-cases
 
@@ -17,11 +19,13 @@ With the goal at hand, our test cases are to see the time taken for the fllowing
 
 1. Create a resource with n number of resources already present in ApiServer and m parallel operations happenning.
 
-2. Get a resource with n number of resources already present in ApiServer and m parallel operations happenning.
+2. Patch a resource with n number of resources already present in ApiServer and m parallel operations happenning.
 
-3. Delete a resource with n number of resources already present in ApiServer and m parallel operations happenning.
+3. Get a resource with n number of resources already present in ApiServer and m parallel operations happenning.
 
-4. Filter set of resources based on a label with n number of resources already present in ApiServer and m parallel operations happenning.
+4. Delete a resource with n number of resources already present in ApiServer and m parallel operations happenning.
+
+5. Filter set of resources based on a label with n number of resources already present in ApiServer and m parallel operations happenning.
 
 ## How to run
 
@@ -38,12 +42,7 @@ const BATCH_SIZE = 5;
 Also, you can change the output file here
 
 ```javascript
-fs.writeFile("datafile/dataCreateGetFilter.csv", actualCsvFromArrayOfObjects, function (err) {
-  if (err) {
-    return console.log(err);
-  }
-  console.log("The file was saved!");
-});
+const fileName = `datafile/dataCreatePatchGetFilter-bosh-${MAX_COUNT}-${BATCH_SIZE}.csv`;
 ```
 Once done, you can run it using
 
@@ -95,34 +94,3 @@ Open http://localhost:3000 to access it and follow the guide to create charts.
 
 ## Statistics
 
-### Service Fabrik ApiServer Stats
-
-#### Data with 1000 resources and 5 parallel operations
-
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Post-bosh-1000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Get-bosh-1000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Filter-bosh-1000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Delete-bosh-1000.png?raw=true)
-
-#### Data with 10000 resources and 5 parallel operations
-
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Post-bosh-10000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Get-bosh-10000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Filter-bosh-10000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Delete-bosh-10000.png?raw=true)
-
-### Gardener ApiServer Stats
-
-#### Data with 100 resources and 5 parallel operations
-
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Post-100.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Get-100.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Filter-100.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Delete-100.png?raw=true)
-
-#### Data with 1000 resources and 5 parallel operations
-
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Post-1000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Get-1000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Filter-1000.png?raw=true)
-![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Delete-1000.png?raw=true)
