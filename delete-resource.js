@@ -11,8 +11,11 @@ const sampleDeployment = require('./sample-deployment.json');
 
 
 const kubeConfigExists = false;
+
+
 const MAX_COUNT = 10;
 const BATCH_SIZE = 5;
+const fileName = "datafile/dataDelete.csv";
 
 
 const configValue = kubeConfigExists ? kc.config.fromKubeconfig('./kubeconfig.yaml') : {
@@ -99,7 +102,7 @@ return promiseChain
     });
     console.log(dataObjects);
     const actualCsvFromArrayOfObjects = convertArrayToCSV(dataObjects);
-    fs.writeFile("datafile/dataDelete.csv", actualCsvFromArrayOfObjects, function (err) {
+    fs.writeFile(fileName, actualCsvFromArrayOfObjects, function (err) {
       if (err) {
         return console.log(err);
       }

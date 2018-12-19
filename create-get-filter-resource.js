@@ -11,8 +11,28 @@ const sampleDeployment = require('./sample-deployment.json');
 
 
 const kubeConfigExists = false;
+
+
 const MAX_COUNT = 10;
 const BATCH_SIZE = 5;
+const fileName = "datafile/dataCreateGetFilter.csv";
+
+
+const patchDep = {
+  "metadata": {
+      "labels": {
+        "some_label" : "some_value"
+      }
+  },
+  "spec": {
+      "options": "new_options"
+  },
+  "status": {
+      "state": "succeeded",
+      "lastOperation": "new_last_operations",
+      "response": "new_response"
+  }
+}
 
 const configValue = kubeConfigExists ? kc.config.fromKubeconfig('./kubeconfig.yaml') : {
   url: 'https://10.11.252.10:9443',
@@ -75,8 +95,21 @@ const createGetFilterAll = function (count) {
     .then(() => {
       let obj = _.find(dataObjects, ['count', count])
       let timeForGet = Date.now() - obj.startGet;
-      let startFilter = Date.now();
+      let startPatch = Date.now();
       obj.get = timeForGet;
+      obj.startPatch = startPatch;
+      return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors(`dddd-${count}`).patch({
+        body: patchDep,
+        headers: {
+          'content-type': 'application/merge-patch+json'
+        }
+      })
+    })
+    .then(() => {
+      let obj = _.find(dataObjects, ['count', count])
+      let timeForPatch = Date.now() - obj.startPatch;
+      let startFilter = Date.now();
+      obj.patch = timeForPatch;
       obj.startFilter = startFilter;
       return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors.get({
         qs: {
@@ -88,11 +121,10 @@ const createGetFilterAll = function (count) {
       let obj = _.find(dataObjects, ['count', count])
       let timeForFilter = Date.now() - obj.startFilter;
       obj.filter = timeForFilter;
-      _.omit(obj, ['startPost', 'startGet', 'startFilter']);
       _.remove(dataObjects, function (n) {
         return n.count == count;
       });
-      dataObjects.push(_.pick(obj, ['count', 'post', 'get', 'filter']));
+      dataObjects.push(_.pick(obj, ['count', 'post', 'patch', 'get', 'filter']));
       return obj;
     }));
 };
@@ -126,7 +158,7 @@ return promiseChain
     });
     console.log(dataObjects);
     const actualCsvFromArrayOfObjects = convertArrayToCSV(dataObjects);
-    fs.writeFile("datafile/dataCreateGetFilter.csv", actualCsvFromArrayOfObjects, function (err) {
+    fs.writeFile(fileName, actualCsvFromArrayOfObjects, function (err) {
       if (err) {
         return console.log(err);
       }
