@@ -94,3 +94,6 @@ Open http://localhost:3000 to access it and follow the guide to create charts.
 
 ## Statistics
 
+### Service Fabrik APIServer
+
+Other statistics are [here](https://github.com/subhankarc/apiserver-perf-test/blob/master/SFApiServerStats.md)
