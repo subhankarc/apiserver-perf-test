@@ -96,4 +96,33 @@ Open http://localhost:3000 to access it and follow the guide to create charts.
 
 ### Service Fabrik APIServer
 
+
+
+#### Data with 30000 resources and 20 parallel operations
+In all the graphs, the x axis represents the number of resources in APIServer and y axis denotes the time taken in milliseconds for each of these operations.
+![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/CreateGetPatchFilter-bosh-30000-20.png?raw=true)
+
+While the workload was running, we measured the ETCD performance. Below are some of the metrics.
+
+| CPU Usage  | Disk Latency |
+| ------------- | ------------- |
+| ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_cpuusage.png?raw=true)  | ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_disklatency.png?raw=true)  |
+
+| Disk Usage  | ETCD Process consumption|
+| ------------- | ------------- |
+| ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_diskusage.png?raw=true)  | ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_etcd.png?raw=true)  |
+
+| INodes  | Iops |
+| ------------- | ------------- |
+| ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_inodes.png?raw=true)  | ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_iops.png?raw=true)  |
+
+| Memory Usage  | Packets |
+| ------------- | ------------- |
+| ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_memusage.png?raw=true)  | ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_packets.png?raw=true)  |
+
+| Throughput  | Traffic |
+| ------------- | ------------- |
+| ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_throughput.png?raw=true)  | ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/bosh-30000-20/etcd0_traffic.png?raw=true)  |
+
+
 Other statistics are [here](https://github.com/subhankarc/apiserver-perf-test/blob/master/SFApiServerStats.md)
