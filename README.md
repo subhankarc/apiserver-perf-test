@@ -99,8 +99,11 @@ Open http://localhost:3000 to access it and follow the guide to create charts.
 
 
 #### Data with 30000 resources and 20 parallel operations
-In all the graphs, the x axis represents the number of resources in APIServer and y axis denotes the time taken in milliseconds for each of these operations.
+In all the graphs, the **x axis represents the number of resources in APIServer** and **y axis denotes the time taken in milliseconds for each of these operations**.
+
 ![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/CreateGetPatchFilter-bosh-30000-20.png?raw=true)
+
+![alt text](https://github.com/subhankarc/apiserver-perf-test/blob/master/graphs/Delete-bosh-30000-20.png?raw=true)
 
 While the workload was running, we measured the ETCD performance. Below are some of the metrics.
 
