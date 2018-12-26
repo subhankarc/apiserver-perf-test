@@ -32,45 +32,27 @@ const client = new kc.Client({
 const crdJson = yaml.safeLoad(fs.readFileSync('./deployment-crd.yaml', 'utf8'));
 client.addCustomResourceDefinition(crdJson);
 
-let ready = false;
-
-function init() {
-  return Promise.try(() => {
-    if (!ready) {
-      return client.loadSpec()
-        .then(() => {
-          ready = true;
-        })
-        .catch(err => {
-          console.log('Error occured while loading ApiServer Spec', err);
-          throw err;
-        });
-    }
-  });
-}
-
 let dataObjects = [];
 
 const deleteAll = function (count) {
-  return Promise.try(() => init()
-    .then(() => {
-      let startDelete = Date.now();
-      dataObjects.push({
-        count: count,
-        startDelete: startDelete
-      });
-      return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors(`dddd-${count}`).delete();
-    })
-    .then(() => {
-      let obj = _.find(dataObjects, ['count', count])
-      let timeForDelete = Date.now() - obj.startDelete;
-      obj.delete = timeForDelete;
-      _.omit(obj, ['startDelete']);
-      _.remove(dataObjects, function (n) {
-        return n.count == count;
-      });
-      dataObjects.push(_.pick(obj, ['count', 'delete']));
-    }))
+  return Promise.try(() => {
+    let startDelete = Date.now();
+    dataObjects.push({
+      count: count,
+      startDelete: startDelete
+    });
+    return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors(`dddd-${count}`).delete()
+      .then(() => {
+        let obj = _.find(dataObjects, ['count', count])
+        let timeForDelete = Date.now() - obj.startDelete;
+        obj.delete = timeForDelete;
+        _.omit(obj, ['startDelete']);
+        _.remove(dataObjects, function (n) {
+          return n.count == count;
+        });
+        dataObjects.push(_.pick(obj, ['count', 'delete']));
+      })
+  });
 };
 
 const chunk = (array, batchSize = BATCH_SIZE) => {

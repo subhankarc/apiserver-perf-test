@@ -20,17 +20,17 @@ const fileName = `datafile/dataCreatePatchGetFilter-bosh-${MAX_COUNT}-${BATCH_SI
 
 const patchDep = {
   "metadata": {
-      "labels": {
-        "some_label" : "some_value"
-      }
+    "labels": {
+      "some_label": "some_value"
+    }
   },
   "spec": {
-      "options": "new_options"
+    "options": "new_options"
   },
   "status": {
-      "state": "succeeded",
-      "lastOperation": "new_last_operations",
-      "response": "new_response"
+    "state": "succeeded",
+    "lastOperation": "new_last_operations",
+    "response": "new_response"
   }
 }
 
@@ -48,85 +48,67 @@ const client = new kc.Client({
 const crdJson = yaml.safeLoad(fs.readFileSync('./deployment-crd.yaml', 'utf8'));
 client.addCustomResourceDefinition(crdJson);
 
-let ready = false;
-
-function init() {
-  return Promise.try(() => {
-    if (!ready) {
-      return client.loadSpec()
-        .then(() => {
-          ready = true;
-        })
-        .catch(err => {
-          console.log('Error occured while loading ApiServer Spec', err);
-          throw err;
-        });
-    }
-  });
-}
-
 let dataObjects = [];
 
 const createGetFilterAll = function (count) {
-  return Promise.try(() => init()
-    .then(() => {
-      let startPost = Date.now();
-      dataObjects.push({
-        count: count,
-        startPost: startPost
-      });
-      return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default')['director'].post({
+  return Promise.try(() => {
+    let startPost = Date.now();
+    dataObjects.push({
+      count: count,
+      startPost: startPost
+    });
+    return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default')['director'].post({
         body: massageData(sampleDeployment, count)
       })
-    })
-    .then(() => {
-      let obj = _.find(dataObjects, ['count', count])
-      let timeForPost = Date.now() - obj.startPost;
-      let startGet = Date.now();
-      obj.post = timeForPost;
-      obj.startGet = startGet;
+      .then(() => {
+        let obj = _.find(dataObjects, ['count', count])
+        let timeForPost = Date.now() - obj.startPost;
+        let startGet = Date.now();
+        obj.post = timeForPost;
+        obj.startGet = startGet;
 
-      return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors.get({
-        qs: {
-          fieldSelector: `metadata.name=dddd-${count}`
-        }
+        return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors.get({
+          qs: {
+            fieldSelector: `metadata.name=dddd-${count}`
+          }
+        })
       })
-    })
-    .then(() => {
-      let obj = _.find(dataObjects, ['count', count])
-      let timeForGet = Date.now() - obj.startGet;
-      let startPatch = Date.now();
-      obj.get = timeForGet;
-      obj.startPatch = startPatch;
-      return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors(`dddd-${count}`).patch({
-        body: patchDep,
-        headers: {
-          'content-type': 'application/merge-patch+json'
-        }
+      .then(() => {
+        let obj = _.find(dataObjects, ['count', count])
+        let timeForGet = Date.now() - obj.startGet;
+        let startPatch = Date.now();
+        obj.get = timeForGet;
+        obj.startPatch = startPatch;
+        return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors(`dddd-${count}`).patch({
+          body: patchDep,
+          headers: {
+            'content-type': 'application/merge-patch+json'
+          }
+        })
       })
-    })
-    .then(() => {
-      let obj = _.find(dataObjects, ['count', count])
-      let timeForPatch = Date.now() - obj.startPatch;
-      let startFilter = Date.now();
-      obj.patch = timeForPatch;
-      obj.startFilter = startFilter;
-      return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors.get({
-        qs: {
-          labelSelector: 'sample_label=hundreds'
-        }
+      .then(() => {
+        let obj = _.find(dataObjects, ['count', count])
+        let timeForPatch = Date.now() - obj.startPatch;
+        let startFilter = Date.now();
+        obj.patch = timeForPatch;
+        obj.startFilter = startFilter;
+        return client.apis['deployment.servicefabrik.io'].v1alpha1.namespaces('default').directors.get({
+          qs: {
+            labelSelector: 'sample_label=hundreds'
+          }
+        })
       })
-    })
-    .then(() => {
-      let obj = _.find(dataObjects, ['count', count])
-      let timeForFilter = Date.now() - obj.startFilter;
-      obj.filter = timeForFilter;
-      _.remove(dataObjects, function (n) {
-        return n.count == count;
-      });
-      dataObjects.push(_.pick(obj, ['count', 'post', 'patch', 'get', 'filter']));
-      return obj;
-    }));
+      .then(() => {
+        let obj = _.find(dataObjects, ['count', count])
+        let timeForFilter = Date.now() - obj.startFilter;
+        obj.filter = timeForFilter;
+        _.remove(dataObjects, function (n) {
+          return n.count == count;
+        });
+        dataObjects.push(_.pick(obj, ['count', 'post', 'patch', 'get', 'filter']));
+        return obj;
+      })
+  });
 };
 
 const chunk = (array, batchSize = BATCH_SIZE) => {
